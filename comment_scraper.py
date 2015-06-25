@@ -4,8 +4,8 @@ for fetching comments from a given subreddit and then writes them to an sqlite
 database.
 
 Dependencies: praw, sqlite
-	  Author: Justin Cosentino
-		Date: 06-25-2015
+Author: Justin Cosentino
+Date: 06-25-2015
 """
 
 # --------------------------------------------------------------------------- #
@@ -237,7 +237,7 @@ def main():
 	)
 
 	while True:
-		cs_1.scrape_interval(1,60,True)
+		# cs_1.scrape_interval(1,60,True)
 		cs_2.scrape_interval(1,60,True)
 		cs_3.scrape_interval(1,60,True)
 		cs_4.scrape_interval(1,60,True)
