@@ -7,8 +7,8 @@ methods for accessing ngrams, potential start states, and average sentence
 length.
 
 Dependencies: nltk, sqlite
-	  Author: Justin Cosentino
-		Date: 06-25-2015
+Author: Justin Cosentino
+Date: 06-25-2015
 """
 
 # --------------------------------------------------------------------------- #
