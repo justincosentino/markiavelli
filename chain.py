@@ -1,4 +1,9 @@
 """
+A MarkovChain class that pulls ngram data from TextContent and CommentComment
+objects. It then generates sentences of a set minimum length.
+
+Author: Justin Cosentino
+Date: 06-25-2015
 """
 
 # --------------------------------------------------------------------------- #
@@ -20,6 +25,9 @@ class MarkovChain(object):
 
 	def __init__(self, content, n=2, context=[]):
 		"""
+		A MarkovChain class that pulls ngram data from TextContent and 
+		CommentComment objects.
+
 		content: list, list of TextContent and CommentComment objects
 		ngrams:  int,  prefix length
 		context: list, list of strings where each string is a keyword
@@ -79,10 +87,18 @@ class MarkovChain(object):
 
 	def _get_start_states(self, weight=2):
 		"""
+		Fetches candidate start states from content objects and applies 
+		weights if keywords have been provided.
+
+		weight: int, value by which to multiple the number of occurrences of 
+				context words
 		"""
+		# Merge start state counters from Content objects
 		start_states = Counter() 
 		for c in self.content_objs:
 			start_states += c.get_start_states()
+
+		# Apply weights if context keywords have been provided
 		if self.context_keywords:
 			for state in start_states:
 				for word in state:
@@ -114,6 +130,12 @@ class MarkovChain(object):
 		return start
 
 	def _is_ending(self, chain):
+		"""
+		Given a chain, determine if the final word / suffix in that chain
+		can serve as a terminating state.
+
+		chain: list, chain of states
+		"""
 		exceptions = "U.S.|U.N.|E.U.|F.B.I.|C.I.A.".split("|")
 		if chain[-1] in exceptions:
 			return False
@@ -127,6 +149,10 @@ class MarkovChain(object):
 
 	def _step(self, chain):
 		"""
+		Given a chain, determine the next state. Throw a MarkovChainException 
+		if no such state exists.
+
+		chain: list, chain of states
 		"""
 		# Fetch current prefix
 		prefix = tuple(chain[-self.n:])
@@ -142,17 +168,23 @@ class MarkovChain(object):
 
 	def generate_sentence(self, start='', min_length=20, length_error=5):
 		"""
+		Generate and return a sentence of minimum length that contains a 
+		terminating state.
+
 		min_length: int, the desired length of the generated sentence
 		length_error: int, error margin for generated sentence
 		"""
 		chain = list(self._valid_start_state(start))
 		while True:
+
+			# Try / except to handle bad transitions
 			try:
 				chain.append(self._step(chain))
 			except MarkovChainException as e:
 				break
 
-			if len(chain) > min_length and self._is_ending(chain):
+			# Break if hit an ending suffix within a margin of the min len
+			if len(chain) > min_length - length_error and self._is_ending(chain):
 				break
 
 		return ' '.join(chain)
@@ -166,6 +198,8 @@ class MarkovChain(object):
 
 	def update_ngram_size(self, n):
 		"""
+		Given a new ngram size, update associated parameters.
+
 		n: int, new length of prefix ngrams
 		"""
 		self.n = n
@@ -175,6 +209,8 @@ class MarkovChain(object):
 
 	def update_context(self, context):
 		"""
+		Given new context keywords, update associated parameters.
+
 		context: list, list of strings representing new context keywords
 		"""
 		self.context_keywords = {k: True for k in context}
@@ -186,12 +222,16 @@ class MarkovChain(object):
 def main():
 	from content import TextContent, CommentContent
 
-	n   = 3
-	tc1 = TextContent("./texts/the_prince.txt", n)
-	tc2 = TextContent("./texts/the_discourses.txt", n)
-	cc  = CommentContent("./texts/rpolitics.db", n)
+	n = 2
+	tc_1 = TextContent("./texts/the_prince.txt", n)
+	tc_2 = TextContent("./texts/the_discourses.txt", n)
+	tc_3 = TextContent("./texts/harry_potter_and_the_sorcerers_stone.txt", n)
+	cc_1 = CommentContent("./texts/rpolitics.db", n)
+	cc_2 = CommentContent("./texts/rchangemyview.db", n)
+	cc_3 = CommentContent("./texts/rdebateachristian.db", n)
+	cc_4 = CommentContent("./texts/rdebateanatheist.db", n)
 
-	content = [tc1, tc2, cc]
+	content = [tc_1, tc_2, tc_2, cc_1, cc_2, cc_3, cc_4]
 	mc = MarkovChain(content, n, [])
 	for i in range(10):	
 		print mc.generate_sentence()
