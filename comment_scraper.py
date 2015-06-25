@@ -218,16 +218,38 @@ class CommentScraper(object):
 # --------------------------------------------------------------------------- #
 
 def main():
-	# Init a comment scraper
-	cs = CommentScraper("politics", "./texts/rpolitics.db")
-	
-	# Check for more comments every 10 minutes
-	wait = 10 * 60
-	cs.scrape_interval(10, wait, True)
+	# Init comment scrapers
+	cs_1 = CommentScraper(
+		"politics", 
+		"./texts/rpolitics.db"
+	)
+	cs_2 = CommentScraper(
+		"debateachristian", 
+		"./texts/rdebateachristian.db"
+	)
+	cs_3 = CommentScraper(
+		"debateanatheist", 
+		"./texts/rdebateanatheist.db"
+	)
+	cs_4 = CommentScraper(
+		"changemyview", 
+		"./texts/rchangemyview.db"
+	)
+
+	while True:
+		cs_1.scrape_interval(1,60,True)
+		cs_2.scrape_interval(1,60,True)
+		cs_3.scrape_interval(1,60,True)
+		cs_4.scrape_interval(1,60,True)
+		sleep(60*10)
+
 	# cs.monitor(100, wait, True)
 
 	# Close the database connection
-	cs.close(True)
+	cs_1.close(True)
+	cs_2.close(True)
+	cs_3.close(True)
+	cs_4.close(True)
 
 # --------------------------------------------------------------------------- #
 
