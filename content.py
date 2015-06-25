@@ -1,3 +1,4 @@
+
 """
 Class definitions for general Markov chain content storage objects. The Content
 class provides an interface for the two children classes, CommentContent and 
@@ -90,7 +91,7 @@ class Content(object):
 			self.total_length += sum(len(s.split()) for s in sentences)
 
 			# Determine starting states
-			starts = [tuple(s.split()[:self.n]) for s in sentences if len(s) >= self.n]
+			starts = [tuple(s.split()[:self.n]) for s in sentences if len(s) > self.n]
 			start_states.extend(starts)
 
 		counts = Counter(start_states)
@@ -104,7 +105,7 @@ class Content(object):
 		self.ngrams = _extract_ngrams()
 		self.start_states = self._extract_start_states()
 
-	def get_ngrams(self):
+	def get_ngram_blocks(self):
 		"""
 		Return a list of lists. Each inner list contains the ngrams for the 
 		associated text block.
@@ -128,14 +129,14 @@ class Content(object):
 
 class TextContent(Content):
 
-	def __init__(self, filepath):
+	def __init__(self, filepath, n=2):
 		"""
 		TextContent takes a filepath to a text file on initialization and 
 		parses this file, removing whitespace and newlines. ngrams, start 
 		states, and average sentence length can then be retrieved with getter
 		methods. 
 		"""
-		super(TextContent, self).__init__(filepath)
+		super(TextContent, self).__init__(filepath, n)
 
 	def _read_content(self):
 		"""
@@ -156,14 +157,14 @@ class TextContent(Content):
 
 class CommentContent(Content):
 
-	def __init__(self, filepath):
+	def __init__(self, filepath, n=2):
 		"""
 		CommentContent takes a filepath to a sqlite db on initialization and 
 		parses post bodies, removing whitespace and newlines. ngrams, start 
 		states, and average sentence length can then be retrieved with getter
 		methods. 
 		"""
-		super(CommentContent, self).__init__(filepath)
+		super(CommentContent, self).__init__(filepath, n)
 
 	def _read_content(self):
 		"""
@@ -201,9 +202,10 @@ class CommentContent(Content):
 # --------------------------------------------------------------------------- #
 
 def main():
-	tc1 = TextContent("./texts/the_prince.txt")
-	tc2 = TextContent("./texts/the_discourses.txt")
-	cc  = CommentContent("./texts/rpolitics.db")	
+	# tc1 = TextContent("./texts/the_prince.txt")
+	# tc2 = TextContent("./texts/the_discourses.txt")
+	# cc  = CommentContent("./texts/rpolitics.db")
+	return
 
 # --------------------------------------------------------------------------- #
 
