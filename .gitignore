@@ -1,3 +1,4 @@
 *.pyc
 scratch/
 writeup.md
+config.py
