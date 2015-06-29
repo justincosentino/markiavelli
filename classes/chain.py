@@ -166,7 +166,7 @@ class MarkovChain(object):
 		suffix = random.choice(self.weighted_transitions[prefix])
 		return suffix
 
-	def generate_sentence(self, start='', min_length=20, length_error=5):
+	def generate_sentence(self, start='', min_length=25, length_error=5):
 		"""
 		Generate and return a sentence of minimum length that contains a 
 		terminating state.
@@ -223,19 +223,28 @@ def main():
 	from content import TextContent, CommentContent
 
 	n = 2
-	tc_1 = TextContent("./texts/the_prince.txt", n)
-	tc_2 = TextContent("./texts/the_discourses.txt", n)
-	tc_3 = TextContent("./texts/harry_potter_and_the_sorcerers_stone.txt", n)
-	cc_1 = CommentContent("./texts/rpolitics.db", n)
-	cc_2 = CommentContent("./texts/rchangemyview.db", n)
-	cc_3 = CommentContent("./texts/rdebateachristian.db", n)
-	cc_4 = CommentContent("./texts/rdebateanatheist.db", n)
+	tc_1 = TextContent("../texts/the_prince.txt", n)
+	tc_2 = TextContent("../texts/the_discourses.txt", n)
+	tc_3 = TextContent("../texts/harry_potter_and_the_sorcerers_stone.txt", n)
+	# cc_1 = CommentContent("../texts/rpolitics.db", n)
+	# cc_2 = CommentContent("../texts/rchangemyview.db", n)
+	# cc_3 = CommentContent("../texts/rdebateachristian.db", n)
+	# cc_4 = CommentContent("../texts/rdebateanatheist.db", n)
 
-	content = [tc_1, tc_2, tc_2, cc_1, cc_2, cc_3, cc_4]
+	content = [
+		tc_1, 
+		tc_2, 
+		tc_3, 
+		# cc_1, 
+		# cc_2, 
+		# cc_3, 
+		# cc_4
+	]
 	mc = MarkovChain(content, n, [])
-	for i in range(10):	
+	for i in range(20):	
+		print "#------------------------------------------#"
 		print mc.generate_sentence()
-		print 
+		
 
 
 # --------------------------------------------------------------------------- #
